@@ -103,22 +103,22 @@ Node *get_new_node(const Node *root, char *name, int quantity) {
     prud -> name = name ;
     if(!allocate_and_cpy(root->product.name,prud->name)) {
         fprintf(stderr,INVALID_POINTER) ;
-        delete_tree(root) ;
+        free(*root) ;
         return NULL ;
     }
     root->product = prud ;
     if(!root->product.quantity){
-        delete_tree(&root) ;
+        free(*root) ;
         fprintf(stderr,INVALID_QUANTITY);
         return NULL ;
     }
-    return root;
+    return *root;
 }
 
 
 Node search_node_by_prod(Node *root, char *name){
     if (!root) {
-        return *root ;
+        return &root ;
     }
     if(strcmp(root->left_child->product.name , name) == 0) {
         return *root->left_child ;
