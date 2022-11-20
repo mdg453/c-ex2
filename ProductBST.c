@@ -33,25 +33,27 @@ Node *build_bst (const char *filename)
     }
     char buffer[MAX_LINE_LENGTH];
     fgets(buffer, MAX_LINE_LENGTH, fp);
-    Product p;
+    char name[MAX_LINE_LENGTH];
+    int quant;
     char *tok = NULL;
     while(fgets(buffer,MAX_LINE_LENGTH+1,fp)){
-        tok = strtok(buffer,":");
-        if (!tok){
+        if(!(tok = strtok(buffer,":"))){
             return INVALID_LINE ;
         }
-        if(!(p.quantity = (int)strtol(tok,NULL,10))) {
+        strcpy(tok, name) ;
+        if(!(quant = (int)strtol(strtok(NULL, ":"),NULL ,10))) {
             return INVALID_LINE ;
         }
-        if(!(p.quantity = (int)strtol(tok,NULL,10))) {
-            return INVALID_LINE ;
-        }
+        Node node;
+        add_product(node,name,quant) ;
 
 
 
     }
 
+    fclose(fp) ;
     printf("%s",buffer);
+    return EXIT_SUCCESS;
 }
 
 Node *add_product (Node *root, char *name, int quantity) {
@@ -79,7 +81,7 @@ Node *get_new_node(const Node *root, char *name, int quantity) {
         return ALLOCATION_FAILED;
     }
     prud -> quantity = quantity;
-    prud ->name = name ;
+    prud -> name = name ;
     Node* node = malloc(sizeof (Node)) ;
     if (!node) {
         return ALLOCATION_FAILED;
@@ -99,12 +101,50 @@ Node *get_new_node(const Node *root, char *name, int quantity) {
 }
 
 Node *delete_product (Node *root, char *name){
-    return root;
+    /*
+    if (!(root)){
+        return root;
+    }
+    int cmp = strcmp(root->product.name, name)  ;
+    if (cmp == 0){
+        free(root->product.name) ;
+        free(root) ;
+    }
+    if (cmp < 1)
+        return (delete_product(root->right_child, name)) ;
+    if (cmp > 1) {
+        return (delete_product((root->left_child), name)) ;
+    }
+    return ;
+     */
+    Product *node_to_del = search_product(root,name) ;
+
+
 }
 
+
 Product *search_product (Node *root, char *name){
-    return root;
+    Product prud =root->product ;
+    int flag = 0 ;
+    int i = 0 ;
+    int cmp = strcmp(prud.name, name) ;
+    if (cmp == 0 ) {
+        return &root->product ;
+    }
+    if (cmp > 0) {
+        if (root->right_child) {
+            return search_product(root->right_child, name);
+        }
+    }
+    if (cmp < 0) {
+        if(root->left_child) {
+            return search_product(root->left_child, name);
+        }
+
+    }
 }
+
+
 void delete_tree (Node *root){
 }
 Node* update_quantity (Node *root, char *name, int amount_to_update){
