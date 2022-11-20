@@ -10,7 +10,8 @@ int allocate_and_cpy (char *dest , const char *src)
     dest = malloc (strlen (src) + 1);
     if (!dest)
     {
-        return ALLOCATION_FAILED;
+        fprintf(stderr,ALLOCATION_FAILED) ;
+        return EXIT_FAILURE;
     }
     strcpy (dest, src);
     return EXIT_SUCCESS;
@@ -25,52 +26,71 @@ Node *bst_root(void)
 Node *build_bst (const char *filename)
 {
     if(!filename){
-        INVALID_POINTER;
+        fprintf(stderr,INVALID_POINTER);
+        return NULL ;
     }
     FILE* fp = fopen(filename, "r") ;
     if (!fp){
-        return FILE_OPEN_FAILED;
+        fprintf(stderr,FILE_OPEN_FAILED);
+        return NULL ;
     }
     char buffer[MAX_LINE_LENGTH];
-    fgets(buffer, MAX_LINE_LENGTH, fp);
     char name[MAX_LINE_LENGTH];
     int quant;
     char *tok = NULL;
+    Node *root = bst_root() ;
+    if (!root){
+        fclose(fp) ;
+        delete_tree(root) ;
+        fprintf(stderr,INVALID_POINTER);
+        return NULL ;
+    }
     while(fgets(buffer,MAX_LINE_LENGTH+1,fp)){
         if(!(tok = strtok(buffer,":"))){
-            return INVALID_LINE ;
+            fclose(fp);
+            delete_tree(root) ;
+            fprintf(stderr,INVALID_LINE);
+            return NULL ;
         }
         strcpy(tok, name) ;
         if(!(quant = (int)strtol(strtok(NULL, ":"),NULL ,10))) {
-            return INVALID_LINE ;
+            fclose(fp);
+            delete_tree(root) ;
+            fprintf(stderr,INVALID_LINE);
+            return NULL ;
         }
-        Node node;
-        add_product(node,name,quant) ;
-
-
-
+        add_product(root,name,quant) ;
     }
-
     fclose(fp) ;
-    printf("%s",buffer);
-    return EXIT_SUCCESS;
+    return root;
 }
 
 Node *add_product (Node *root, char *name, int quantity) {
     if(!root){
-        return INVALID_POINTER ;
+        fprintf(stderr,INVALID_POINTER);
+        return NULL ;
     }
     if(!name){
-        return INVALID_LINE ;
+        fprintf(stderr,INVALID_LINE);
+        return NULL ;
     }
     if(!quantity){
-        return INVALID_QUANTITY;
+        fprintf(stderr,INVALID_QUANTITY);
+        return NULL ;
+    }
+    int cmp = strcmp(root->product.name, name) ;
+    if (cmp == 0) {
+        fprintf(stderr,p);
+        return NULL ;
+        return PRODUCT_EXISTS ;
     }
     Node *new_node = get_new_node(root, name, quantity);
-    if (!new_node){
-        return ALLOCATION_FAILED ;
+    if (cmp > 1){
+        root->left_child = new_node ;
     }
-
+    if (cmp < 1){
+        root->right_child = new_node ;
+    }
     return new_node;
 
 }
@@ -82,51 +102,85 @@ Node *get_new_node(const Node *root, char *name, int quantity) {
     }
     prud -> quantity = quantity;
     prud -> name = name ;
-    Node* node = malloc(sizeof (Node)) ;
-    if (!node) {
-        return ALLOCATION_FAILED;
-    }
-    if(!allocate_and_cpy(node->product.name,prud->name)) {
-        free(node);
+    if(!allocate_and_cpy(root->product.name,prud->name)) {
+        delete_tree(root) ;
         return EXIT_FAILURE ;
     }
-    node->product.quantity = prud->quantity ;
-    if(!node->product.quantity){
-        free(node);
-        free(prud) ;
+    root->product.quantity = prud->quantity ;
+    if(!root->product.quantity){
+        delete_tree(root) ;
         return INVALID_QUANTITY ;
     }
-
     return root;
 }
 
+
+Node search_node_by_prod(Node *root, char *name){
+    if (!root) {
+        return *root ;
+    }
+    int cmp = strcmp(root->product.name, name) ;
+    if (cmp == 0) {
+        return *root ;
+    }
+    if (cmp > 0) {
+        return search_node_by_prod(root->left_child, name) ;
+    }
+    return search_node_by_prod(root->right_child, name)
+}
+
+Node *find_suc (Node* root){
+    if(root->left_child == NULL) {
+        return root ;
+    }
+    return find_suc(root->left_child) ;
+}
+
 Node *delete_product (Node *root, char *name){
-    /*
     if (!(root)){
+        fprintf(stderr,INVALID_POINTER) ;
         return root;
     }
-    int cmp = strcmp(root->product.name, name)  ;
-    if (cmp == 0){
-        free(root->product.name) ;
-        free(root) ;
+    Node node_to_del = search_node_by_prod(root, name) ;
+    if(!node_to_del.left_child && !node_to_del.right_child){
+        delete_tree(&node_to_del) ;
     }
-    if (cmp < 1)
-        return (delete_product(root->right_child, name)) ;
-    if (cmp > 1) {
-        return (delete_product((root->left_child), name)) ;
+    if(node_to_del.right_child && node_to_del.left_child){
+        if(node_to_del.right_child->left_child && !node_to_del.right_child->right_child){
+            Node keeper = *node_to_del.right_child->left_child ;
+            delete_tree(node_to_del.right_child) ;
+            node_to_del.right_child = &keeper ;
+        }
+        if(!node_to_del.right_child->left_child && node_to_del.right_child->right_child){
+            Node keeper = *node_to_del.right_child->right_child ;
+            delete_tree(node_to_del.right_child) ;
+            node_to_del.right_child = &keeper ;
+        }
     }
-    return ;
-     */
-    Product *node_to_del = search_product(root,name) ;
+    if(!node_to_del.right_child && node_to_del.left_child) {
+        if (node_to_del.left_child->left_child && !node_to_del.right_child->right_child) {
+            Node keeper = *node_to_del.left_child->left_child;
+            delete_tree(node_to_del.left_child);
+            node_to_del.left_child = &keeper;
+        }
+        if (!root->left_child->left_child && root->left_child->right_child) {
+            Node keeper = root->left_child->right_child;
+            delete_tree(root->left_child);
+            root->left_child = &keeper;
+        }
+    }
 
 
+
+
+
+    return root ;
 }
+
 
 
 Product *search_product (Node *root, char *name){
     Product prud =root->product ;
-    int flag = 0 ;
-    int i = 0 ;
     int cmp = strcmp(prud.name, name) ;
     if (cmp == 0 ) {
         return &root->product ;
@@ -146,6 +200,13 @@ Product *search_product (Node *root, char *name){
 
 
 void delete_tree (Node *root){
+    if (!root){
+        return;
+    }
+    delete_tree(root->right_child) ;
+    delete_tree(root->left_child) ;
+    free(root->right_child);
+    free(root->left_child);
 }
 Node* update_quantity (Node *root, char *name, int amount_to_update){
     return root ;
