@@ -93,7 +93,7 @@ Node *add_product (Node *root, char *name, int quantity) {
     return new_node;
 }
 
-Node *get_new_node(const Node *root, char *name, int quantity) {
+Node *get_new_node(Node *root, char *name, int quantity) {
     Product* prud = malloc(sizeof (Product)) ;
     if (!prud) {
         fprintf(stderr, ALLOCATION_FAILED);
@@ -110,13 +110,13 @@ Node *get_new_node(const Node *root, char *name, int quantity) {
         fprintf(stderr,INVALID_QUANTITY);
         return NULL ;
     }
-    return root.;
+    return *root;
 }
 
 
 Node search_node_by_prod(Node *root, char *name){
     if (!root) {
-        return &root ;
+        return NULL ;
     }
     if(strcmp(root->left_child->product.name , name) == 0) {
         return *root->left_child ;
