@@ -103,16 +103,14 @@ Node *get_new_node(const Node *root, char *name, int quantity) {
     prud -> name = name ;
     if(!allocate_and_cpy(root->product.name,prud->name)) {
         fprintf(stderr,INVALID_POINTER) ;
-        free(*root) ;
         return NULL ;
     }
     root->product = prud ;
     if(!root->product.quantity){
-        free(*root) ;
         fprintf(stderr,INVALID_QUANTITY);
         return NULL ;
     }
-    return *root;
+    return root.;
 }
 
 
