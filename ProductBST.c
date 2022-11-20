@@ -106,9 +106,7 @@ Node *get_new_node(const Node *root, char *name, int quantity) {
         delete_tree(root) ;
         return NULL ;
     }
-    Product *point_prud = prud ;
-    Product *point_tree = &root->product ;
-    point_tree = point_prud;
+    root->product = prud ;
     if(!root->product.quantity){
         delete_tree(&root) ;
         fprintf(stderr,INVALID_QUANTITY);
@@ -219,8 +217,12 @@ void delete_tree (Node *root){
     if (!root){
         return;
     }
-    delete_tree(root->right_child) ;
-    delete_tree(root->left_child) ;
+    if (root->right_child) {
+        delete_tree(root->right_child);
+    }
+    if (root->left_child) {
+        delete_tree(root->left_child);
+    }
     free(root->right_child->product.name);
     free(root->left_child->product.name);
     free(root->right_child);
