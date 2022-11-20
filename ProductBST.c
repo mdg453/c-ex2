@@ -212,7 +212,7 @@ Product *search_product (Node *root, char *name){
         }
 
     }
-    return *root ;
+    return &root->product ;
 }
 
 
