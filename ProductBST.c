@@ -21,22 +21,22 @@ Node get_new_node(Node *root, char *name, int quantity) {
     if (!prud) {
         fprintf(stderr, ALLOCATION_FAILED);
         delete_tree(root) ;
-        return root;
+        return *root;
     }
     prud -> quantity = quantity;
     prud -> name = name ;
     if(!allocate_and_cpy(root->product.name,prud->name)) {
         fprintf(stderr,INVALID_POINTER) ;
         delete_tree(root) ;
-        return root ;
+        return *root ;
     }
     root->product = *prud ;
     if(!root->product.quantity){
         fprintf(stderr,INVALID_QUANTITY);
-        delete_tree(root)
-        return root ;
+        delete_tree(root) ;
+        return *root ;
     }
-    return root;
+    return *root;
 }
 
 Node *bst_root(void)
@@ -106,12 +106,12 @@ Node *add_product (Node *root, char *name, int quantity) {
     }
     Node new_node = get_new_node(root, name, quantity);
     if (cmp > 1){
-        root->left_child = new_node ;
+        root->left_child = *new_node ;
     }
     if (cmp < 1){
-        root->right_child = new_node ;
+        root->right_child = *new_node ;
     }
-    return new_node;
+    return root;
 }
 
 
