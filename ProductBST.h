@@ -123,3 +123,4 @@ void delete_tree (Node *root);
  * of tree after deleting this product.
  */
 Node* update_quantity (Node *root, char *name, int amount_to_update);
+

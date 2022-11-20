@@ -9,25 +9,25 @@
  */
 int main (int argc, char *argv[])
 {
-  if (argc < 2)
+    if (argc < 2)
     {
-      fprintf (stderr, ARGC_ERROR_MSG);
-      return EXIT_FAILURE;  // EXIT_FAILURE is a macro for 1. Only to be used as return value from main or
-      // parameter to exit()! Don't use it to replace 1 in function return value etc.
+        fprintf (stderr, ARGC_ERROR_MSG);
+        return EXIT_FAILURE;  // EXIT_FAILURE is a macro for 1. Only to be used as return value from main or
+        // parameter to exit()! Don't use it to replace 1 in function return value etc.
     }
 
-  // parse from file products BST
-  Node *root = build_bst (argv[1]);
+    // parse from file products BST
+    Node *root = build_bst (argv[1]);
 
-  // add new product to the tree, search and delete it
-  root = add_product (root, "New Laptop", 80);
-  Product *new_laptop = search_product (root, "New Laptop");
-  root = delete_product (root,"New Laptop");
+    // add new product to the tree, search and delete it
+    root = add_product (root, "New Laptop", 80);
+    Product *new_laptop = search_product (root, "New Laptop");
+    root = delete_product (root,"New Laptop");
 
-  // add another new product, and update it
-  root = add_product (root, "One More Laptop", 20);
-  root = update_quantity (root, "One More Laptop", -1);
+    // add another new product, and update it
+    root = add_product (root, "One More Laptop", 20);
+    root = update_quantity (root, "One More Laptop", -1);
 
-  delete_tree (root);
-  return EXIT_SUCCESS; // macro for 0. Like EXIT_FAILURE, not to be used for function return values!!
+    delete_tree (root);
+    return EXIT_SUCCESS; // macro for 0. Like EXIT_FAILURE, not to be used for function return values!!
 }
