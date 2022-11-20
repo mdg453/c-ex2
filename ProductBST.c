@@ -223,16 +223,10 @@ void delete_tree (Node *root){
     if (!root){
         return;
     }
-    if (root->right_child) {
-        delete_tree(root->right_child);
-    }
-    if (root->left_child) {
-        delete_tree(root->left_child);
-    }
-    free(root->right_child->product.name);
-    free(root->left_child->product.name);
-    free(root->right_child);
-    free(root->left_child);
+    delete_tree(root->left_child);
+    delete_tree(root->right_child);
+    free(root->product.name);
+    free(root) ;
 }
 
 Node* update_quantity (Node *root, char *name, int amount_to_update){
