@@ -9,6 +9,7 @@
  */
 int main (int argc, char *argv[])
 {
+    /*
     if (argc < 2)
     {
         fprintf (stderr, ARGC_ERROR_MSG);
@@ -19,6 +20,7 @@ int main (int argc, char *argv[])
     // parse from file products BST
     Node *root = build_bst (argv[1]);
 
+
     // add new product to the tree, search and delete it
     root = add_product (root, "New Laptop", 80);
     Product *new_laptop = search_product (root, "New Laptop");
@@ -28,6 +30,15 @@ int main (int argc, char *argv[])
     root = add_product (root, "One More Laptop", 20);
     root = update_quantity (root, "One More Laptop", -1);
 
-    delete_tree (root);
+    Node *root = build_bst(argv[1]) ;
+    */
+    Node root;
+    Product pro ;
+    pro.quantity = 5 ;
+    pro.name = "mino" ;
+    root.product =pro ;
+    //delete_tree (&root);
+    printf("%s",root.product.name) ;
+
     return EXIT_SUCCESS; // macro for 0. Like EXIT_FAILURE, not to be used for function return values!!
 }
