@@ -20,18 +20,21 @@ Node get_new_node(Node *root, char *name, int quantity) {
     Product* prud = malloc(sizeof (Product)) ;
     if (!prud) {
         fprintf(stderr, ALLOCATION_FAILED);
-        return NULL;
+        delete_tree(root) ;
+        return root;
     }
     prud -> quantity = quantity;
     prud -> name = name ;
     if(!allocate_and_cpy(root->product.name,prud->name)) {
         fprintf(stderr,INVALID_POINTER) ;
-        return NULL ;
+        delete_tree(root) ;
+        return root ;
     }
-    *root->product = prud ;
+    root->product = *prud ;
     if(!root->product.quantity){
         fprintf(stderr,INVALID_QUANTITY);
-        return NULL ;
+        delete_tree(root)
+        return root ;
     }
     return root;
 }
@@ -101,7 +104,7 @@ Node *add_product (Node *root, char *name, int quantity) {
         fprintf(stderr,PRODUCT_EXISTS);
         return root ;
     }
-    Node *new_node = get_new_node(root, name, quantity);
+    Node new_node = get_new_node(root, name, quantity);
     if (cmp > 1){
         root->left_child = new_node ;
     }
@@ -116,7 +119,7 @@ Node *add_product (Node *root, char *name, int quantity) {
 
 Node search_node_by_prod(Node *root, char *name){
     if (!root) {
-        return NULL ;
+        return root;
     }
     if(strcmp(root->left_child->product.name , name) == 0) {
         return *root->left_child ;
