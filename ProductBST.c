@@ -3,7 +3,6 @@
 #include <string.h>
 #include "ProductBST.h"
 
-Node *get_new_node(const Node *root, char *name, int quantity);
 
 int allocate_and_cpy (char *dest , const char *src)
 {
@@ -17,6 +16,25 @@ int allocate_and_cpy (char *dest , const char *src)
     return EXIT_SUCCESS;
 }
 
+Node get_new_node(Node *root, char *name, int quantity) {
+    Product* prud = malloc(sizeof (Product)) ;
+    if (!prud) {
+        fprintf(stderr, ALLOCATION_FAILED);
+        return NULL;
+    }
+    prud -> quantity = quantity;
+    prud -> name = name ;
+    if(!allocate_and_cpy(root->product.name,prud->name)) {
+        fprintf(stderr,INVALID_POINTER) ;
+        return NULL ;
+    }
+    *root->product = prud ;
+    if(!root->product.quantity){
+        fprintf(stderr,INVALID_QUANTITY);
+        return NULL ;
+    }
+    return root;
+}
 
 Node *bst_root(void)
 {
@@ -93,25 +111,7 @@ Node *add_product (Node *root, char *name, int quantity) {
     return new_node;
 }
 
-Node *get_new_node(Node *root, char *name, int quantity) {
-    Product* prud = malloc(sizeof (Product)) ;
-    if (!prud) {
-        fprintf(stderr, ALLOCATION_FAILED);
-        return NULL;
-    }
-    prud -> quantity = quantity;
-    prud -> name = name ;
-    if(!allocate_and_cpy(root->product.name,prud->name)) {
-        fprintf(stderr,INVALID_POINTER) ;
-        return NULL ;
-    }
-    root->product = prud ;
-    if(!root->product.quantity){
-        fprintf(stderr,INVALID_QUANTITY);
-        return NULL ;
-    }
-    return *root;
-}
+
 
 
 Node search_node_by_prod(Node *root, char *name){
@@ -164,7 +164,8 @@ Node *delete_product (Node *root, char *name){
         }
     }
         if(node_to_del.right_child && node_to_del.left_child){
-            if(node_to_del.right_child->left_child && !node_to_del.right_child->right_child){
+            if(node_to_del.right_child->left_child &&
+                            !node_to_del.right_child->right_child){
                 Node keeper = *node_to_del.right_child->left_child ;
                 delete_tree(node_to_del.right_child) ;
               node_to_del.right_child = &keeper ;
