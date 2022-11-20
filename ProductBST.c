@@ -173,19 +173,22 @@ Node *delete_product (Node *root, char *name){
                 delete_tree(node_to_del.right_child) ;
               node_to_del.right_child = &keeper ;
             }
-           if(!node_to_del.right_child->left_child && node_to_del.right_child->right_child){
+           if(!node_to_del.right_child->left_child &&
+                                    node_to_del.right_child->right_child){
                 Node keeper = *node_to_del.right_child->right_child ;
                delete_tree(node_to_del.right_child) ;
                 node_to_del.right_child = &keeper ;
            }
         }
         if(!node_to_del.right_child && node_to_del.left_child) {
-           if (node_to_del.left_child->left_child && !node_to_del.right_child->right_child) {
+           if (node_to_del.left_child->left_child &&
+                            !node_to_del.right_child->right_child) {
                     Node keeper = *node_to_del.left_child->left_child;
                 delete_tree(node_to_del.left_child);
                 node_to_del.left_child = &keeper;
             }
-            if (!node_to_del.left_child->left_child && node_to_del.left_child->right_child) {
+            if (!node_to_del.left_child->left_child &&
+                                node_to_del.left_child->right_child) {
                 Node keeper = *node_to_del.left_child->right_child;
                 delete_tree(node_to_del.left_child);
                 node_to_del.left_child = &keeper;
