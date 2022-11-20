@@ -106,10 +106,10 @@ Node *add_product (Node *root, char *name, int quantity) {
     }
     Node new_node = get_new_node(root, name, quantity);
     if (cmp > 1){
-        root->left_child = *new_node ;
+        root->left_child = &new_node ;
     }
     if (cmp < 1){
-        root->right_child = *new_node ;
+        root->right_child = &new_node ;
     }
     return root;
 }
@@ -119,7 +119,7 @@ Node *add_product (Node *root, char *name, int quantity) {
 
 Node search_node_by_prod(Node *root, char *name){
     if (!root) {
-        return root;
+        return *root;
     }
     if(strcmp(root->left_child->product.name , name) == 0) {
         return *root->left_child ;
@@ -212,6 +212,7 @@ Product *search_product (Node *root, char *name){
         }
 
     }
+    return root ;
 }
 
 
